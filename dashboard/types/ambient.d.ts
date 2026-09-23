@@ -222,6 +222,16 @@ declare module "lucide-react" {
   export const X: LucideIcon;
   export const Inbox: LucideIcon;
   export const RefreshCw: LucideIcon;
+  export const Activity: LucideIcon;
+  export const Workflow: LucideIcon;
+  export const ChevronDown: LucideIcon;
+  export const User: LucideIcon;
+  export const Play: LucideIcon;
+  export const ArrowDown: LucideIcon;
+  export const Waves: LucideIcon;
+  export const Search: LucideIcon;
+  export const Check: LucideIcon;
+  export const FileText: LucideIcon;
 }
 
 declare module "@radix-ui/react-switch" {

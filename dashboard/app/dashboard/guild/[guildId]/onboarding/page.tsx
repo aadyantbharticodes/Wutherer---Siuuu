@@ -27,10 +27,7 @@ export default function OnboardingPage() {
     "Welcome to **{guild.name}**, {user.mention}! Please make sure to check out the rules and verify your account."
   );
   const [dmDelay, setDmDelay] = useState(0);
-  const [buttons, setButtons] = useState<ActionButton[]>([
-    { label: "Server Rules", url: "https://discord.com" },
-    { label: "Get Roles", url: "https://discord.com" },
-  ]);
+  const [buttons, setButtons] = useState<ActionButton[]>([]);
   const [newBtnLabel, setNewBtnLabel] = useState("");
   const [newBtnUrl, setNewBtnUrl] = useState("");
 

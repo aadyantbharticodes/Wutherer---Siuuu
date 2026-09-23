@@ -25,7 +25,7 @@ export function EmptyState({
       )}
       {...props}
     >
-      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-card-border bg-surface text-primary-light">
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-card-border bg-surface text-primary">
         <Icon className="h-5 w-5" />
       </div>
       <h3 className="text-sm font-semibold text-slate-200">{title}</h3>

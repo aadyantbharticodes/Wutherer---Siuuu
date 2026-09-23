@@ -22,6 +22,8 @@ import {
   Layers,
   UserPlus,
   ShieldCheck,
+  FileText,
+  ShoppingBag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +37,8 @@ const sections = (guildId: string) => [
     links: [
       { name: "Overview", href: `/dashboard/guild/${guildId}`, icon: LayoutDashboard },
       { name: "Analytics", href: `/dashboard/guild/${guildId}/analytics`, icon: BarChart3 },
+      { name: "Logs", href: `/dashboard/guild/${guildId}/logs`, icon: FileText },
+      { name: "Commands", href: `/dashboard/guild/${guildId}/commands`, icon: Terminal },
     ],
   },
   {
@@ -52,6 +56,7 @@ const sections = (guildId: string) => [
       { name: "Onboarding", href: `/dashboard/guild/${guildId}/onboarding`, icon: UserPlus },
       { name: "Leveling", href: `/dashboard/guild/${guildId}/leveling`, icon: Award },
       { name: "Tickets", href: `/dashboard/guild/${guildId}/tickets`, icon: Ticket },
+      { name: "Economy", href: `/dashboard/guild/${guildId}/economy`, icon: ShoppingBag },
     ],
   },
   {
@@ -90,11 +95,11 @@ export function Sidebar({ guildId }: SidebarProps) {
   }, [guildId, query]);
 
   return (
-    <aside className="w-full shrink-0 border-b border-card-border bg-secondary lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:w-64 lg:border-b-0 lg:border-r lg:overflow-y-auto">
+    <aside className="dash-sidebar w-full shrink-0 border-b border-card-border lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:w-64 lg:border-b-0 lg:border-r lg:overflow-y-auto">
       <div className="px-3 pt-3 pb-3">
         <Link
           href="/dashboard"
-          className="flex h-8 items-center gap-2 rounded-md px-2 text-xs font-medium text-slate-400 transition-colors hover:bg-surface-hover hover:text-white"
+          className="flex h-8 items-center gap-2 rounded-xl px-2 text-xs font-medium text-slate-400 transition-colors hover:bg-surface-hover hover:text-white"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>Switch Server</span>
@@ -106,7 +111,7 @@ export function Sidebar({ guildId }: SidebarProps) {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Find a tool"
-            className="h-8 w-full rounded-md border border-card-border bg-surface py-1 pl-8 pr-2 text-xs text-white outline-none placeholder:text-slate-600 focus:border-primary"
+            className="h-8 w-full rounded-xl border border-card-border bg-surface py-1 pl-8 pr-2 text-xs text-white outline-none placeholder:text-slate-600 focus:border-primary"
           />
         </label>
       </div>
@@ -128,13 +133,13 @@ export function Sidebar({ guildId }: SidebarProps) {
                     key={link.name}
                     href={link.href}
                     className={cn(
-                      "flex min-h-8 items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-colors",
+                      "flex min-h-8 items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-[13px] font-medium transition-all duration-200",
                       isActive
-                        ? "bg-primary-subtle text-primary-light"
+                        ? "bg-primary-subtle text-primary"
                         : "text-slate-400 hover:bg-surface-hover hover:text-white"
                     )}
                   >
-                    <Icon className={cn("h-3.5 w-3.5 shrink-0", isActive ? "text-primary-light" : "text-slate-500")} />
+                    <Icon className={cn("h-3.5 w-3.5 shrink-0", isActive ? "text-primary" : "text-slate-500")} />
                     <span>{link.name}</span>
                   </Link>
                 );

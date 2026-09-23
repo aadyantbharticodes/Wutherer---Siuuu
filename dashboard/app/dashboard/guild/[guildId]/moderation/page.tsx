@@ -2,24 +2,33 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { SectionHeader } from "@/components/ui/section-header";
 import { EmptyState } from "@/components/ui/empty-state";
+import { DataTable } from "@/components/dashboard/data-table";
 import { Shield } from "lucide-react";
 import { api } from "@/lib/api";
+
+type Case = {
+  id: number | string;
+  action: string;
+  user_id: string | number;
+  reason?: string;
+  created_at?: string;
+};
 
 export default function ModerationPage() {
   const params = useParams();
   const guildId = params.guildId as string;
 
-  const [cases, setCases] = useState<any[]>([]);
+  const [cases, setCases] = useState<Case[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (guildId) {
       api.getModerationCases(guildId)
-        .then((data) => setCases(data || []))
+        .then((data) => setCases(Array.isArray(data) ? data : []))
         .catch(() => setCases([]))
         .finally(() => setLoading(false));
     }
@@ -40,13 +49,48 @@ export default function ModerationPage() {
         description="Audit log of automated and staff moderation actions recorded for this server."
       />
 
-      {loading ? (
-        <div className="space-y-2 animate-pulse">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-12 bg-surface rounded-md border border-card-border" />
-          ))}
-        </div>
-      ) : cases.length === 0 ? (
+      {loading || cases.length > 0 ? (
+        <DataTable<Case>
+          rows={cases}
+          loading={loading}
+          getRowKey={(row) => String(row.id)}
+          searchPlaceholder="Search actions, reasons, or user IDs…"
+          searchKeys={(row) => `${row.action} ${row.reason ?? ""} ${row.user_id}`}
+          emptyTitle="No Moderation Cases"
+          emptyDescription="No infractions, warnings, or enforcement actions recorded yet."
+          emptyIcon={Shield}
+          columns={[
+            {
+              key: "case",
+              header: "Case",
+              render: (row) => <span className="font-mono text-slate-400">#{row.id}</span>,
+            },
+            {
+              key: "action",
+              header: "Action",
+              render: (row) => <Badge variant={getActionBadgeVariant(row.action)}>{row.action}</Badge>,
+            },
+            {
+              key: "target",
+              header: "Target User",
+              render: (row) => <span className="font-mono text-white">{row.user_id}</span>,
+            },
+            {
+              key: "reason",
+              header: "Reason",
+              render: (row) => (
+                <span className="block max-w-xs truncate text-slate-300">{row.reason || "No reason provided"}</span>
+              ),
+            },
+            {
+              key: "timestamp",
+              header: "Timestamp",
+              align: "right",
+              render: (row) => <span className="whitespace-nowrap text-slate-500">{row.created_at}</span>,
+            },
+          ]}
+        />
+      ) : (
         <Card>
           <EmptyState
             icon={Shield}
@@ -54,42 +98,12 @@ export default function ModerationPage() {
             description="No infractions, warnings, or enforcement actions recorded yet."
           />
         </Card>
-      ) : (
-        <Card className="p-0 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-card-border bg-surface text-slate-400 font-medium">
-                <tr>
-                  <th className="px-4 py-2.5">Case</th>
-                  <th className="px-4 py-2.5">Action</th>
-                  <th className="px-4 py-2.5">Target User</th>
-                  <th className="px-4 py-2.5">Reason</th>
-                  <th className="px-4 py-2.5 text-right">Timestamp</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-card-border">
-                {cases.map((c) => (
-                  <tr key={c.id} className="hover:bg-surface-hover/50 transition-colors">
-                    <td className="px-4 py-2.5 font-mono text-slate-400">#{c.id}</td>
-                    <td className="px-4 py-2.5">
-                      <Badge variant={getActionBadgeVariant(c.action)}>
-                        {c.action}
-                      </Badge>
-                    </td>
-                    <td className="px-4 py-2.5 font-mono text-white">{c.user_id}</td>
-                    <td className="px-4 py-2.5 text-slate-300 max-w-xs truncate">
-                      {c.reason || "No reason provided"}
-                    </td>
-                    <td className="px-4 py-2.5 text-right text-slate-500 whitespace-nowrap">
-                      {c.created_at}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
       )}
+
+      <p className="text-[11px] leading-relaxed text-slate-600">
+        Read-only history from the bot API. Moderation actions themselves are taken in Discord;
+        destructive actions there require staff confirmation.
+      </p>
     </div>
   );
 }

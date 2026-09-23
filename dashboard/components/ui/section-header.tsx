@@ -20,7 +20,7 @@ export function SectionHeader({
       {...props}
     >
       <div>
-        <h1 className="text-xl font-semibold tracking-tight text-white">{title}</h1>
+        <h1 className="text-xl font-medium tracking-tight text-white">{title}</h1>
         {description && (
           <p className="mt-1 max-w-2xl text-sm text-slate-400">{description}</p>
         )}
