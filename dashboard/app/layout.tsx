@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./landing.css";
 
 export const metadata: Metadata = {
-  title: "Wutherer Dashboard",
+  title: "Wutherer",
   description: "Wutherer controls for Discord server safety, community workflows, and automation.",
 };
 
@@ -19,4 +20,3 @@ export default function RootLayout({
     </html>
   );
 }
-
